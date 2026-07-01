@@ -27,3 +27,13 @@ def test_duplicate_signup_returns_conflict():
     assert app_module.activities["Chess Club"]["participants"] == [
         "existing@mergington.edu"
     ]
+
+
+def test_unregister_removes_participant():
+    response = client.delete(
+        "/activities/Chess Club/signup?email=existing@mergington.edu"
+    )
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Removed existing@mergington.edu from Chess Club"
+    assert app_module.activities["Chess Club"]["participants"] == []
